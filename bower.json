@@ -2,6 +2,7 @@
   "name": "messaging-subscribe-toggle",
   "main": "messaging-subscribe-toggle.html",
   "dependencies": {
+    "paper-toggle-button": "PolymerElements/paper-toggle-button#^1.3.0",
     "polymer": "Polymer/polymer#^1.4.0",
     "polymerfire": "firebase/polymerfire#^0.10.3"
   },

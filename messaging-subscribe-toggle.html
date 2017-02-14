@@ -1,5 +1,8 @@
 <link rel="import" href="../polymer/polymer.html">
 
+<!-- Paper elements -->
+<link rel="import" href="../paper-toggle-button/paper-toggle-button.html">
+
 <!-- Firebase elements -->
 <link rel="import" href="../polymerfire/firebase-app.html">
 <link rel="import" href="../polymerfire/firebase-document.html">
@@ -30,18 +33,17 @@
         messaging-sender-id="861178504130"></firebase-app>
     <firebase-messaging id="messaging"
         app-name="test-messaging-app"
-        token="{{token}}"
+        token="{{_token}}"
         last-message="{{lastMessage}}"
-        on-message="handleMessage"></firebase-messaging>
-    <!-- <firebase-document id="topicDocument"
+        on-message="_handleMessage"></firebase-messaging>
+    <firebase-document id="topicDocument"
         app-name="test-messaging-app"
-        path="/topics/[[token]]"
-        data="{{topicData}}"></firebase-document> -->
-    <!-- <firebase-document id="nofiticationDocument"
-        app-name="test-messaging-app"
-        data="[[notificationData]]"></firebase-document> -->
+        path="/topics/[[_token]]"
+        data="{{_topicData}}"></firebase-document>
 
-
+    <paper-toggle-button id="subscribe"
+        on-tap="_toggleSubscription"
+        checked="[[_topicData.topic]]">[[value]]</paper-toggle-button>
 
   </template>
 
@@ -50,26 +52,69 @@
 
       is: 'messaging-subscribe-toggle',
 
+      /**
+       * Fired when messaging registration token for this session changes.
+       * @event token-changed
+       */
+
+      /**
+       * Fired when a notification is received.
+       * @event message-received
+       */
+
       properties: {
-        token: {
+        _token: {
           type: String,
           observer: '_tokenChanged'
         },
         lastMessage: {
+          type: Object,
+          readOnly: true,
+          notify: true
+        },
+        topic: {
+          type: String
+        },
+        _topicData: {
           type: Object
+        },
+        value: {
+          type: String,
+          value: "Subscribe to notifications"
         }
       },
 
       _tokenChanged: function(token) {
         if (token) {
-          console.log('_tokenChanged: %s', token);
           this.fire('token-changed', { token: token });
         }
       },
 
-      handleMessage: function(message) {
-        console.log('handleMessage: %O', message);
+      _handleMessage: function(message) {
+        this.fire('message-received', { message: message })
       },
+
+      _toggleSubscription: function() {
+        if (this.$.subscribe.checked) {
+          this.$.messaging.requestPermission().then(function() {
+            // permission was granted
+            if (!this._token) {
+              this.addEventListener('token-changed', function(event) {
+                // setting topic data
+                this.set('_topicData', { topic: this.topic });
+              });
+            } else {
+              // setting topic data
+              this.set('_topicData', { topic: this.topic });
+            }
+          }.bind(this), function(err) {
+            // permission was denied
+          });
+        } else {
+          // resetting topic data
+          this.set('topicData', null);
+        }
+      }
 
     });
   </script>
