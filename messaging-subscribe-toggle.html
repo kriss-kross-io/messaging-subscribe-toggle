@@ -1,5 +1,10 @@
 <link rel="import" href="../polymer/polymer.html">
 
+<!-- Firebase elements -->
+<link rel="import" href="../polymerfire/firebase-app.html">
+<link rel="import" href="../polymerfire/firebase-document.html">
+<link rel="import" href="../polymerfire/firebase-messaging.html">
+
 <!--
 `<messaging-subscribe-toggle>`
 
@@ -16,7 +21,27 @@
       }
     </style>
 
-    <h2>Hello [[prop1]]</h2>
+    <firebase-app
+        name="test-messaging-app"
+        api-key="AIzaSyCGWWkF6VyRA98_y-xDINbRxTocflavzOc",
+        auth-domain="test-9cc76.firebaseapp.com",
+        database-url="https://test-9cc76.firebaseio.com",
+        storage-bucket="test-9cc76.appspot.com"
+        messaging-sender-id="861178504130"></firebase-app>
+    <firebase-messaging id="messaging"
+        app-name="test-messaging-app"
+        token="{{token}}"
+        last-message="{{lastMessage}}"
+        on-message="handleMessage"></firebase-messaging>
+    <!-- <firebase-document id="topicDocument"
+        app-name="test-messaging-app"
+        path="/topics/[[token]]"
+        data="{{topicData}}"></firebase-document> -->
+    <!-- <firebase-document id="nofiticationDocument"
+        app-name="test-messaging-app"
+        data="[[notificationData]]"></firebase-document> -->
+
+
 
   </template>
 
@@ -26,10 +51,24 @@
       is: 'messaging-subscribe-toggle',
 
       properties: {
-        prop1: {
+        token: {
           type: String,
-          value: 'messaging-subscribe-toggle',
+          observer: '_tokenChanged'
         },
+        lastMessage: {
+          type: Object
+        }
+      },
+
+      _tokenChanged: function(token) {
+        if (token) {
+          console.log('_tokenChanged: %s', token);
+          this.fire('token-changed', { token: token });
+        }
+      },
+
+      handleMessage: function(message) {
+        console.log('handleMessage: %O', message);
       },
 
     });
