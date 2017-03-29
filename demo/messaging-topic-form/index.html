@@ -12,8 +12,6 @@
     <link rel="import" href="../../../iron-demo-helpers/demo-snippet.html">
     <link rel="import" href="../../messaging-topic-form.html">
 
-    <link rel="manifest" href="manifest.json">
-
     <style is="custom-style" include="demo-pages-shared-styles">
     </style>
   </head>
@@ -21,11 +19,10 @@
     <div class="vertical-section-container centered">
       <h3>Basic messaging-topic-form demo</h3>
       <demo-snippet>
-        <messaging-topic-form></messaging-topic-form>
-        <!--<template id="template" is="dom-bind">
-          <messaging-subscribe-toggle topic="test-topic" value="Subscribe to test-topic" db-config="[[config]]"></messaging-subscribe-toggle>
-        </template>-->
-        <!--<script>
+        <template id="template" is="dom-bind">
+          <messaging-topic-form db-config="[[config]]"></messaging-topic-form>
+        </template>
+        <script>
           var t = document.getElementById('template');
           t.config = {
               apiKey: 'AIzaSyCGWWkF6VyRA98_y-xDINbRxTocflavzOc',
@@ -34,7 +31,7 @@
               storageBucket: 'test-9cc76.appspot.com',
               messageSenderId: '861178504130'
             };
-        </script>-->
+        </script>
       </demo-snippet>
     </div>
   </body>

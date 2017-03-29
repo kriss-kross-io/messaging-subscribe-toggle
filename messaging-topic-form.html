@@ -1,9 +1,14 @@
 <link rel="import" href="../polymer/polymer.html">
 
+<!--Paper elements-->
+<link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../paper-input/paper-input.html">
+<link rel="import" href="../paper-styles/color.html">
+
 <!-- Firebase elements -->
-<!--<link rel="import" href="../polymerfire/firebase-app.html">
+<link rel="import" href="../polymerfire/firebase-app.html">
 <link rel="import" href="../polymerfire/firebase-document.html">
-<link rel="import" href="../polymerfire/firebase-messaging.html">-->
+<link rel="import" href="../polymerfire/firebase-messaging.html">
 
 <!--
 `<messaging-topic-form>`
@@ -19,9 +24,13 @@
       :host {
         display: block;
       }
+      paper-button.green {
+        background-color: var(--paper-green-500);
+        color: white;
+      }
     </style>
 
-    <!--<firebase-app
+    <firebase-app
         name="test-messaging-app"
         api-key="[[dbConfig.apiKey]]",
         auth-domain="[[dbConfig.authDomain]]",
@@ -30,15 +39,32 @@
         messaging-sender-id="[[dbConfig.messageSenderId]]"></firebase-app>
     <firebase-messaging id="messaging"
         app-name="test-messaging-app"
-        token="{{_token}}"
-        last-message="{{lastMessage}}"
-        on-message="_handleMessage"></firebase-messaging>
-    <firebase-document id="topicDocument"
+        token="{{_token}}"></firebase-messaging>
+    <firebase-document id="nofiticationDocument"
         app-name="test-messaging-app"
-        path="/topics/[[_token]]"
-        data="{{_topicData}}"></firebase-document>-->
+        data="[[notificationData]]"></firebase-document>
 
+    <paper-input
+        required
+        disabled
+        label="Topic"
+        value="{{topic}}"></paper-input>
+    <paper-input
+        required
+        label="Title"
+        value="{{title}}"></paper-input>
+    <paper-input
+        required
+        label="Body"
+        value="{{body}}"></paper-input>
+    <paper-input
+        label="Click action"
+        placeholder="https://google.com"
+        value="{{click_action}}"></paper-input>
 
+    <paper-button class="green"
+        raised
+        on-tap="sendNotification">Send</paper-button>
 
   </template>
 
@@ -48,18 +74,52 @@
       is: 'messaging-topic-form',
 
       properties: {
-        // dbConfig: {
-        //   type: Object,
-        //   value: function() {
-        //     return {
-        //       apiKey: null,
-        //       authDomain: null,
-        //       databaseURL: null,
-        //       storageBucket: null,
-        //       messageSenderId: '861178504130'
-        //     }
-        //   }
-        // }
+        dbConfig: {
+          type: Object,
+          value: function() {
+            return {
+              apiKey: null,
+              authDomain: null,
+              databaseURL: null,
+              storageBucket: null,
+              messageSenderId: '861178504130'
+            }
+          }
+        },
+        topic: {
+          type: String,
+          value: 'test-topic'
+        },
+        title: {
+          type: String,
+          value: null
+        },
+        body: {
+          type: String,
+          value: null
+        },
+        click_action: {
+          type: String,
+          value: null
+        },
+        notificationData: {
+          type: Object
+        }
+      },
+
+      sendNotification: function() {
+        this.set('notificationData', {
+          topic: this.topic,
+          notification: {
+            title: this.title,
+            body: this.body,
+            click_action: this.click_action
+          }
+        });
+
+        this.$.nofiticationDocument.save('/notifications').then(function() {
+          this.$.nofiticationDocument.reset();
+        }.bind(this));
       }
 
     });
