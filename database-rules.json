@@ -1,0 +1,21 @@
+{
+  "rules": {
+    // By default, make all data private unless specified otherwise.
+    ".read": false,
+    ".write": false,
+    "notifications": {
+      ".read": true,
+      "$key": {
+        ".write": true,
+        ".validate": "newData.child('topic').exists() && newData.child('notification').child('title').exists() && newData.child('notification').child('body').exists()"
+      }
+    },
+    "topics": {
+      ".read": true,
+      "$token": {
+        ".write": true,
+        ".validate": "newData.child('topic').exists()"
+      }
+    }
+  }
+}
