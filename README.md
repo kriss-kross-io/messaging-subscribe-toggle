@@ -1,4 +1,4 @@
-# \<messaging-subscribe-toggle\>
+# \<messaging-tools\>
 
 
 

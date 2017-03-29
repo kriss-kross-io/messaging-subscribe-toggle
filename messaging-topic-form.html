@@ -1,0 +1,67 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<!-- Firebase elements -->
+<!--<link rel="import" href="../polymerfire/firebase-app.html">
+<link rel="import" href="../polymerfire/firebase-document.html">
+<link rel="import" href="../polymerfire/firebase-messaging.html">-->
+
+<!--
+`<messaging-topic-form>`
+
+@demo demo/messaging-topic-form/index.html 
+-->
+
+<dom-module id="messaging-topic-form">
+
+  <template>
+
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+
+    <!--<firebase-app
+        name="test-messaging-app"
+        api-key="[[dbConfig.apiKey]]",
+        auth-domain="[[dbConfig.authDomain]]",
+        database-url="[[dbConfig.databaseURL]]",
+        storage-bucket=[[dbConfig.storageBucket]]""
+        messaging-sender-id="[[dbConfig.messageSenderId]]"></firebase-app>
+    <firebase-messaging id="messaging"
+        app-name="test-messaging-app"
+        token="{{_token}}"
+        last-message="{{lastMessage}}"
+        on-message="_handleMessage"></firebase-messaging>
+    <firebase-document id="topicDocument"
+        app-name="test-messaging-app"
+        path="/topics/[[_token]]"
+        data="{{_topicData}}"></firebase-document>-->
+
+
+
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'messaging-topic-form',
+
+      properties: {
+        // dbConfig: {
+        //   type: Object,
+        //   value: function() {
+        //     return {
+        //       apiKey: null,
+        //       authDomain: null,
+        //       databaseURL: null,
+        //       storageBucket: null,
+        //       messageSenderId: '861178504130'
+        //     }
+        //   }
+        // }
+      }
+
+    });
+  </script>
+</dom-module>

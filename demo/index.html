@@ -1,38 +1,35 @@
 <!doctype html>
 <html lang="en">
   <head>
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 
-    <title>messaging-subscribe-toggle demo</title>
+    <title>messaging-tools demo</title>
 
     <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 
-    <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
-    <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
-    <link rel="import" href="../messaging-subscribe-toggle.html">
+    <link rel="import" href="../../paper-styles/demo-pages.html">
 
-    <style is="custom-style" include="demo-pages-shared-styles">
+    <style>
+      a {
+        display: block;
+        margin-bottom: 10px;
+      }
     </style>
+
   </head>
-  <body>
-    <div class="vertical-section-container centered">
-      <h3>Basic messaging-subscribe-toggle demo</h3>
-      <demo-snippet>
-        <template id="template" is="dom-bind">
-          <messaging-subscribe-toggle topic="test-topic" value="Subscribe to test-topic" db-config="[[config]]"></messaging-subscribe-toggle>
-        </template>
-        <script>
-          var t = document.getElementById('template');
-          t.config = {
-              apiKey: 'AIzaSyCGWWkF6VyRA98_y-xDINbRxTocflavzOc',
-              authDomain: 'test-9cc76.firebaseapp.com',
-              databaseURL: 'https://test-9cc76.firebaseio.com',
-              storageBucket: 'test-9cc76.appspot.com',
-              messageSenderId: '861178504130'
-            };
-        </script>
-      </demo-snippet>
+  <body unresolved>
+
+    <div class="horizontal-section-container">
+      <div>
+        <h4>Sample demos</h4>
+        <div class="horizontal-section">
+          <a href="messaging-subscribe-toggle/index.html">messaging-subscribe-toggle</a>
+          <a href="messaging-topic-form/index.html">messaging-topic-form</a>
+        </div>
+      </div>
     </div>
+
   </body>
 </html>
