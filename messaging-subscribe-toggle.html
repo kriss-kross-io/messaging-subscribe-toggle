@@ -38,12 +38,12 @@
         on-message="_handleMessage"></firebase-messaging>
     <firebase-document id="topicDocument"
         app-name="test-messaging-app"
-        path="/topics/[[_token]]"
+        path="/topics/[[topic]]/[[_token]]"
         data="{{_topicData}}"></firebase-document>
 
     <paper-toggle-button id="subscribe"
         on-tap="_toggleSubscription"
-        checked="[[_topicData.topic]]">[[value]]</paper-toggle-button>
+        checked="[[!isEmpty(_topicData)]]">[[value]]</paper-toggle-button>
 
   </template>
 
@@ -92,7 +92,7 @@
         },
         value: {
           type: String,
-          value: "Subscribe to notifications"
+          value: ""
         }
       },
 
@@ -113,19 +113,23 @@
             if (!this._token) {
               this.addEventListener('token-changed', function(event) {
                 // setting topic data
-                this.set('_topicData', { topic: this.topic });
-              });
+                this.set('_topicData', true);
+              }.bind(this));
             } else {
               // setting topic data
-              this.set('_topicData', { topic: this.topic });
+              this.set('_topicData', true);
             }
           }.bind(this), function(err) {
             // permission was denied
           });
         } else {
           // resetting topic data
-          this.set('topicData', null);
+          this.set('_topicData', null);
         }
+      },
+
+      isEmpty: function(value) {
+        return this.$.topicDocument.valueIsEmpty(value);
       }
 
     });
