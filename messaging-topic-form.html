@@ -6,9 +6,7 @@
 <link rel="import" href="../paper-styles/color.html">
 
 <!-- Firebase elements -->
-<link rel="import" href="../polymerfire/firebase-app.html">
 <link rel="import" href="../polymerfire/firebase-document.html">
-<link rel="import" href="../polymerfire/firebase-messaging.html">
 
 <!--
 `<messaging-topic-form>`
@@ -30,18 +28,7 @@
       }
     </style>
 
-    <firebase-app
-        name="test-messaging-app"
-        api-key="[[dbConfig.apiKey]]",
-        auth-domain="[[dbConfig.authDomain]]",
-        database-url="[[dbConfig.databaseURL]]",
-        storage-bucket=[[dbConfig.storageBucket]]""
-        messaging-sender-id="[[dbConfig.messageSenderId]]"></firebase-app>
-    <firebase-messaging id="messaging"
-        app-name="test-messaging-app"
-        token="{{_token}}"></firebase-messaging>
     <firebase-document id="nofiticationDocument"
-        app-name="test-messaging-app"
         data="[[notificationData]]"></firebase-document>
 
     <paper-input
@@ -74,21 +61,9 @@
       is: 'messaging-topic-form',
 
       properties: {
-        dbConfig: {
-          type: Object,
-          value: function() {
-            return {
-              apiKey: null,
-              authDomain: null,
-              databaseURL: null,
-              storageBucket: null,
-              messageSenderId: '861178504130'
-            }
-          }
-        },
         topic: {
           type: String,
-          value: 'test-topic'
+          value: ''
         },
         title: {
           type: String,
