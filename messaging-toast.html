@@ -1,0 +1,129 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<!--Paper elements-->
+<link rel="import" href="../paper-toast/paper-toast.html">
+<link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../paper-icon-button/paper-icon-button.html">
+
+<!--Iron elements-->
+<link rel="import" href="../iron-icons/iron-icons.html">
+<link rel="import" href="../iron-image/iron-image.html">
+
+<!-- Firebase elements -->
+<link rel="import" href="../polymerfire/firebase-messaging.html">
+
+<!--
+`<messaging-toast>`
+
+@demo demo/messaging-toast/index.html
+-->
+
+<dom-module id="messaging-toast">
+
+  <template>
+
+    <style>
+      :host {
+        display: block;
+      }
+      #container {
+        height: 100%;
+        width: 100%;
+      }
+      iron-image {
+        width: 100px;
+        height: 100px;
+        --iron-image-placeholder: {
+          background: #939ed5;
+        };
+      }
+      .text {
+        @apply(--layout-horizontal);
+        padding: 16px 8px 16px 24px;
+      }
+      .actions {
+        @apply(--layout-horizontal);
+        @apply(--layout-center);
+        padding-left: 8px;
+      }
+      .go-button {
+        text-transform: none;
+      }
+      .close-button {
+        color: red;
+      }
+      #toast {
+        @apply(--layout-horizontal);
+        --paper-toast-background-color: #f2f2f2;
+        --paper-toast-color: #000;
+        padding: 0;
+      }
+    </style>
+
+    <firebase-messaging id="messaging"
+        last-message="{{message}}"
+        on-message="_handleMessage"></firebase-messaging>
+
+    <paper-toast id="toast"
+        duration="0"
+        horizontal-align="right">
+      <iron-image id="img"
+          fade
+          preload
+          sizing="contain"></iron-image>
+      <div class="text">
+        <span>This toast will stay opened until you close it, or open another toast.</span>
+        <div class="actions">
+          <a href="#link" tabindex="-1">
+            <paper-button class="go-button" raised>Go to</paper-button>
+          </a>
+          <paper-icon-button class="close-button" icon="close" on-tap="close"></paper-icon-button>
+        </div>
+      </div>
+    </paper-toast>
+
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'messaging-toast',
+
+      /**
+       * Fired when a notification is received.
+       * @event message-received
+       */
+
+      properties: {
+        message: {
+          type: Object,
+          readOnly: true,
+          reflectToAttribute: true,
+          notify: true
+        }
+      },
+
+      open: function() {
+        console.log('open');
+        this.$.img.src = 'http://lorempixel.com/100/100/';
+        this.$.toast.open();
+      },
+
+      close: function() {
+        this.$.toast.close();
+        this.$.img.src = '';
+      },
+
+      _tokenChanged: function(token) {
+        if (token) {
+          this.fire('token-changed', { token: token });
+        }
+      },
+
+      _handleMessage: function(message) {
+        this.fire('message-received', { message: message })
+      }
+
+    });
+  </script>
+</dom-module>

@@ -1,0 +1,90 @@
+<link rel="import" href="../polymer/polymer.html">
+
+
+<dom-module id="x-pretty-json">
+
+  <template>
+
+    <style>
+      @import 'https://fonts.googleapis.com/css?family=Source+Code+Pro';
+      :host {
+        display: block;
+        width: 100%;
+      }
+      pre {
+        background-color: #282c34;
+        border: 1px solid #181a1f;
+        border-radius: 3px;
+        padding: 10px 20px;
+        margin: 20px;
+        resize: both;
+        overflow: auto;
+      }
+      #code {
+        font-family: "Source Code Pro", monospace;
+        font-size: 14px;
+        color: #abb2bf;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+      }
+      .json-key {
+        color: #e06c75;
+      }
+      .json-value {
+        color: #56b6c2;
+      }
+      .json-string {
+        color: #98c379;
+      }
+    </style>
+
+    <pre id="test"><code id="code"></code></pre>
+
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'x-pretty-json',
+
+      properties: {
+        object: {
+          type: Object,
+          observer: '_objChanged'
+        }
+      },
+
+      _objChanged: function(object) {
+        if (object) {
+          var jsonLine = /^( *)("[$\w]+": )?("[^"]*"|[\w.+-]*)?([,[{])?$/mg;
+
+          var markup = JSON.stringify(object, null, 3)
+            .replace(/&/g, '&amp;')
+            .replace(/\\"/g, '&quot;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(jsonLine, this.replacer);
+
+          this.$.code.innerHTML = markup;
+        }
+      },
+
+      replacer: function(match, pIndent, pKey, pVal, pEnd) {
+        var key = '<span class=json-key>';
+        var val = '<span class=json-value>';
+        var str = '<span class=json-string>';
+        var r = pIndent || '';
+        if (pKey) {
+          r = r + key + pKey.replace(/[": ]/g, '') + '</span>: ';
+        }
+        if (pVal) {
+          r = r + (pVal[0] == '"' ? str : val) + pVal + '</span>';
+        }
+
+        return r + (pEnd || '');
+      }
+
+    })
+  </script>
+
+</dom-module>

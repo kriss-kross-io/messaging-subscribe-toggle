@@ -24,9 +24,7 @@
     </style>
 
     <firebase-messaging id="messaging"
-        token="{{_token}}"
-        last-message="{{lastMessage}}"
-        on-message="_handleMessage"></firebase-messaging>
+        token="{{_token}}"></firebase-messaging>
     <firebase-document id="topicDocument"
         path="/topics/[[topic]]/[[_token]]"
         data="{{_topicData}}"></firebase-document>
@@ -47,20 +45,10 @@
        * @event token-changed
        */
 
-      /**
-       * Fired when a notification is received.
-       * @event message-received
-       */
-
       properties: {
         _token: {
           type: String,
           observer: '_tokenChanged'
-        },
-        lastMessage: {
-          type: Object,
-          readOnly: true,
-          notify: true
         },
         topic: {
           type: String
@@ -78,10 +66,6 @@
         if (token) {
           this.fire('token-changed', { token: token });
         }
-      },
-
-      _handleMessage: function(message) {
-        this.fire('message-received', { message: message })
       },
 
       _toggleSubscription: function() {

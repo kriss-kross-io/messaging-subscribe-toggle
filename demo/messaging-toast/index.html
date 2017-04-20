@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>messaging-toast demo</title>
+
+    <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
+
+    <link rel="import" href="../../../iron-demo-helpers/demo-pages-shared-styles.html">
+    <link rel="import" href="../../../iron-demo-helpers/demo-snippet.html">
+    <link rel="import" href="../../../polymerfire/firebase-app.html">
+    <link rel="import" href="../../messaging-toast.html">
+
+    <link rel="import" href="../../x-pretty-json.html">
+
+    <style is="custom-style" include="demo-pages-shared-styles">
+    </style>
+  </head>
+  <body>
+    <div class="vertical-section-container centered">
+      <h3>Basic messaging-toast demo</h3>
+      <demo-snippet>
+        <template is="dom-bind" id="scope">
+          <firebase-app
+              api-key="AIzaSyCGWWkF6VyRA98_y-xDINbRxTocflavzOc"
+              auth-domain="test-9cc76.firebaseapp.com"
+              database-url="https://test-9cc76.firebaseio.com"
+              storage-bucket="test-9cc76.appspot.com"
+              messaging-sender-id="861178504130"></firebase-app>
+
+          <messaging-toast id="toast"></messaging-toast>
+
+          <b>last message:</b>
+          <x-pretty-json object="[[message]]"></x-pretty-json>
+
+          <script>
+            document.querySelector('#toast').addEventListener('message-received', function(event) {
+              console.log(event);
+              scope.message = event.detail.message;
+            });
+          </script>
+        </template>
+      </demo-snippet>
+    </div>
+  </body>
+</html>
