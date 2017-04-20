@@ -11,6 +11,7 @@
     <link rel="import" href="../../../iron-demo-helpers/demo-pages-shared-styles.html">
     <link rel="import" href="../../../iron-demo-helpers/demo-snippet.html">
     <link rel="import" href="../../../polymerfire/firebase-app.html">
+    <link rel="import" href="../../../paper-input/paper-input.html">
     <link rel="import" href="../../messaging-subscribe-toggle.html">
 
     <style is="custom-style" include="demo-pages-shared-styles">
@@ -20,9 +21,23 @@
     <div class="vertical-section-container centered">
       <h3>Basic messaging-subscribe-toggle demo</h3>
       <demo-snippet>
-        <template>
-          <firebase-app></firebase-app>
-          <messaging-subscribe-toggle topic="test-topic" value="Subscribe to test-topic" db-config="[[config]]"></messaging-subscribe-toggle>
+        <template is="dom-bind" id="scope">
+          <firebase-app
+              api-key=""
+              auth-domain=""
+              database-url=""
+              storage-bucket=""
+              messaging-sender-id=""></firebase-app>
+
+          <messaging-subscribe-toggle id="toggle" topic="test-topic" value="Subscribe to test-topic"></messaging-subscribe-toggle>
+          <paper-input label="token" value="[[token]]" readonly></paper-input>
+
+          <script>
+            document.querySelector('#toggle').addEventListener('token-changed', function(event) {
+              console.log(event);
+              scope.token = event.detail.token;
+            });
+          </script>
         </template>
       </demo-snippet>
     </div>
