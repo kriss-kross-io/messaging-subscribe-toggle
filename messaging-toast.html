@@ -6,6 +6,7 @@
 <link rel="import" href="../paper-icon-button/paper-icon-button.html">
 
 <!--Iron elements-->
+<link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../iron-icons/iron-icons.html">
 <link rel="import" href="../iron-image/iron-image.html">
 
@@ -14,6 +15,14 @@
 
 <!--
 `<messaging-toast>`
+
+SERVER_KEY: Firebase console > Project Settings > Cloud Messaging
+
+REG_TOKEN: This is a registration token for current session.
+
+Use for test:
+
+`curl --header "Authorization: key=[[SERVER_KEY]]" --header "Content-Type: application/json" -d '{"to": "[[REG_TOKEN]]", "notification": {"title": "Hello World", "body": "This is a notification", "icon": "http://placehold.it/100x100", "click_action" : "https://google.com"}}' https://fcm.googleapis.com/fcm/send`
 
 @demo demo/messaging-toast/index.html
 -->
@@ -37,9 +46,12 @@
           background: #939ed5;
         };
       }
-      .text {
+      .content {
         @apply(--layout-horizontal);
         padding: 16px 8px 16px 24px;
+      }
+      .text {
+        @apply(--layout-vertical);
       }
       .actions {
         @apply(--layout-horizontal);
@@ -70,14 +82,21 @@
       <iron-image id="img"
           fade
           preload
-          sizing="contain"></iron-image>
-      <div class="text">
-        <span>This toast will stay opened until you close it, or open another toast.</span>
+          sizing="contain"
+          src="[[message.notification.icon]]"></iron-image>
+      <div class="content">
+        <div class="text">
+          <b>[[message.notification.title]]</b>
+          <span>[[message.notification.body]]</span>
+        </div>
         <div class="actions">
-          <a href="#link" tabindex="-1">
-            <paper-button class="go-button" raised>Go to</paper-button>
+          <a href$="[[message.notification.click_action]]" tabindex="-1">
+            <paper-button class="go-button"
+                raised>Go to</paper-button>
           </a>
-          <paper-icon-button class="close-button" icon="close" on-tap="close"></paper-icon-button>
+          <paper-icon-button class="close-button"
+              icon="close"
+              on-tap="_close"></paper-icon-button>
         </div>
       </div>
     </paper-toast>
@@ -97,19 +116,11 @@
       properties: {
         message: {
           type: Object,
-          readOnly: true,
-          reflectToAttribute: true,
           notify: true
         }
       },
 
-      open: function() {
-        console.log('open');
-        this.$.img.src = 'http://lorempixel.com/100/100/';
-        this.$.toast.open();
-      },
-
-      close: function() {
+      _close: function() {
         this.$.toast.close();
         this.$.img.src = '';
       },
@@ -120,8 +131,12 @@
         }
       },
 
-      _handleMessage: function(message) {
-        this.fire('message-received', { message: message })
+      _handleMessage: function(event) {
+        var message = event.detail.message;
+
+        this.fire('message-received', { message: message });
+
+        this.$.toast.open();
       }
 
     });
