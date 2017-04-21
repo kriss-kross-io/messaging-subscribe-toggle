@@ -32,7 +32,11 @@
       #subscribe {
         display: inline-flex;
       }
-      #tooltip {
+      paper-icon-button[hidden],
+      paper-tooltip[hidden] {
+        display: none;
+      }
+      paper-icon-button {
         color: #c10000;
       }
       paper-tooltip {
@@ -57,13 +61,13 @@
     <paper-icon-button id="tooltip"
         icon="error-outline"
         alt="error"
-        hidden="[[_supported]]"></paper-icon-button>
+        hidden$="[[_supported]]"></paper-icon-button>
     <paper-tooltip
         for="tooltip"
         position="right"
         fit-to-visible-bounds
         animation-delay="0"
-        hidden="[[_supported]]">
+        hidden$="[[_supported]]">
         <b>This feature is not supported in your browser.</b>
         <p>Switch to one of the following browsers for full support:</p>
         <ul>
