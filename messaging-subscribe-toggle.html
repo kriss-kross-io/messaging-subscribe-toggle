@@ -1,7 +1,13 @@
 <link rel="import" href="../polymer/polymer.html">
 
 <!-- Paper elements -->
+<link rel="import" href="../paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../paper-toggle-button/paper-toggle-button.html">
+<link rel="import" href="../paper-tooltip/paper-tooltip.html">
+
+<!--Iron elements-->
+<link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../iron-icons/iron-icons.html">
 
 <!-- Firebase elements -->
 <link rel="import" href="../polymerfire/firebase-document.html">
@@ -20,18 +26,53 @@
     <style>
       :host {
         display: block;
+        @apply(--layout-horizontal);
+        @apply(--layout-center);
+      }
+      #subscribe {
+        display: inline-flex;
+      }
+      #tooltip {
+        color: #c10000;
+      }
+      paper-tooltip {
+        --paper-tooltip: {
+          font-size: 14px;
+        };
       }
     </style>
 
     <firebase-messaging id="messaging"
-        token="{{_token}}"></firebase-messaging>
+        token="{{_token}}"
+        push-supported="{{_supported}}"></firebase-messaging>
     <firebase-document id="topicDocument"
         path="/topics/[[topic]]/[[_token]]"
         data="{{_topicData}}"></firebase-document>
 
     <paper-toggle-button id="subscribe"
         on-tap="_toggleSubscription"
+        disabled="[[!_supported]]"
         checked="[[!isEmpty(_topicData)]]">[[value]]</paper-toggle-button>
+
+    <paper-icon-button id="tooltip"
+        icon="error-outline"
+        alt="error"
+        hidden="[[_supported]]"></paper-icon-button>
+    <paper-tooltip
+        for="tooltip"
+        position="right"
+        fit-to-visible-bounds
+        animation-delay="0"
+        hidden="[[_supported]]">
+        <b>This feature is not supported in your browser.</b>
+        <p>Switch to one of the following browsers for full support:</p>
+        <ul>
+          <!--<li>Microsoft Edge</li>-->
+          <li>Mozilla Firefox</li>
+          <li>Google Chrome</li>
+          <li>Opera</li>
+        </ul>
+    </paper-tooltip>
 
   </template>
 
@@ -49,6 +90,9 @@
         _token: {
           type: String,
           observer: '_tokenChanged'
+        },
+        _supported: {
+          type: Boolean
         },
         topic: {
           type: String
