@@ -112,6 +112,7 @@
 
       _tokenChanged: function(token) {
         if (token) {
+          console.info('token:\n%s', token);
           this.fire('token-changed', { token: token });
         }
       },
