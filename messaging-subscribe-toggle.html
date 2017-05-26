@@ -47,10 +47,10 @@
     </style>
 
     <firebase-messaging id="messaging"
-        token="{{_token}}"
+        token="{{token}}"
         push-supported="{{_supported}}"></firebase-messaging>
     <firebase-document id="topicDocument"
-        path="/topics/[[topic]]/[[_token]]"
+        path="/topics/[[topic]]/[[token]]"
         data="{{_topicData}}"></firebase-document>
 
     <paper-toggle-button id="subscribe"
@@ -91,7 +91,7 @@
        */
 
       properties: {
-        _token: {
+        token: {
           type: String,
           observer: '_tokenChanged'
         },
@@ -113,7 +113,7 @@
       _tokenChanged: function(token) {
         if (token) {
           console.info('token:\n%s', token);
-          this.fire('token-changed', { token: token });
+          this.fire('token-updated', { token: token });
         }
       },
 
@@ -121,8 +121,8 @@
         if (this.$.subscribe.checked) {
           this.$.messaging.requestPermission().then(function() {
             // permission was granted
-            if (!this._token) {
-              this.addEventListener('token-changed', function(event) {
+            if (!this.token) {
+              this.addEventListener('token-updated', function(event) {
                 // setting topic data
                 this.set('_topicData', true);
               }.bind(this));

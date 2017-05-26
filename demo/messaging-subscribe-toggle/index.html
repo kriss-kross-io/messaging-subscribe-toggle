@@ -33,7 +33,7 @@
           <paper-input label="token" value="[[token]]" readonly></paper-input>
 
           <script>
-            document.querySelector('#toggle').addEventListener('token-changed', function(event) {
+            document.querySelector('#toggle').addEventListener('token-updated', function(event) {
               console.log(event);
               scope.token = event.detail.token;
             });

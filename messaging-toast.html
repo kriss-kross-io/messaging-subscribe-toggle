@@ -125,12 +125,6 @@ Use for test:
         this.$.img.src = '';
       },
 
-      _tokenChanged: function(token) {
-        if (token) {
-          this.fire('token-changed', { token: token });
-        }
-      },
-
       _handleMessage: function(event) {
         var message = event.detail.message;
 
