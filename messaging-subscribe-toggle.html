@@ -48,6 +48,8 @@
 
     <firebase-messaging id="messaging"
         token="{{_token}}"
+        status-known="{{_status}}"
+        online="{{_online}}"
         push-supported="{{_supported}}"></firebase-messaging>
     <firebase-document id="topicDocument"
         path="/topics/[[topic]]/[[_token]]"
@@ -55,7 +57,7 @@
 
     <paper-toggle-button id="subscribe"
         on-tap="_toggleSubscription"
-        disabled="[[!_supported]]"
+        disabled="[[!_isReady]]"
         checked="[[!isEmpty(_topicData)]]">[[value]]</paper-toggle-button>
 
     <paper-icon-button id="tooltip"
@@ -95,8 +97,19 @@
           type: String,
           observer: '_tokenChanged'
         },
+        _status: {
+          type: Boolean
+        },
+        _online: {
+          type: Boolean
+        },
         _supported: {
           type: Boolean
+        },
+        _isReady: {
+          type: Boolean,
+          value: false,
+          computed: '_computeReadyState(_status, _online, _supported)'
         },
         topic: {
           type: String
@@ -136,6 +149,10 @@
           // resetting topic data
           this.set('_topicData', null);
         }
+      },
+
+      _computeReadyState: function(status, online, supported) {
+        return status && online && supported ? true : false;
       },
 
       isEmpty: function(value) {
