@@ -1,38 +1,51 @@
 # \<messaging-tools\>
 
+## Installation
 
-
-## Install the Polymer-CLI
-
-First, make sure you have the [Polymer CLI](https://www.npmjs.com/package/polymer-cli) installed. Then run `polymer serve` to serve your application locally.
-
-## Viewing Your Application
-
-```
-$ polymer serve
+``` bash
+bower install messaging-tools --save
 ```
 
-## Building Your Application
+## Usage
 
-```
-$ polymer build
-```
+**Remember to also include a `firebase-app` element with the `message-sender-id` set.**
+``` html
+<link rel="import" href="bower_components/messaging-tools/messaging-subscribe-toggle.html">
 
-This will create a `build/` folder with `bundled/` and `unbundled/` sub-folders
-containing a bundled (Vulcanized) and unbundled builds, both run through HTML,
-CSS, and JS optimizers.
-
-You can serve the built versions by giving `polymer serve` a folder to serve
-from:
-
-```
-$ polymer serve build/bundled
+<messaging-subscribe-toggle id="toggle"
+  topic="test-topic"
+  value="Subscribe to test-topic"></messaging-subscribe-toggle>
 ```
 
-## Running Tests
+## Setup
 
-```
-$ polymer test
+### Prerequisites
+
+Install [npm](https://www.npmjs.com/) (or install [Node](https://nodejs.org/en/download/)):
+
+``` bash
+curl -L https://www.npmjs.com/install.sh | sh
 ```
 
-Your application is already set up to be tested via [web-component-tester](https://github.com/Polymer/web-component-tester). Run `polymer test` to run your application's test suite locally.
+Install [bower](https://bower.io/):
+
+``` bash
+npm install -g bower
+```
+
+### Tools
+
+Install [polymer-cli](https://github.com/Polymer/polymer-cli):
+
+``` bash
+npm install -g polymer-cli
+```
+
+### Start the development server
+
+This command serves the app at `http://localhost:8080/components/messaging-tools/` and provides basic URL
+routing for the app:
+
+``` bash
+polymer serve
+```
