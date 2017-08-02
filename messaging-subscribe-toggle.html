@@ -58,7 +58,7 @@
     <paper-toggle-button id="subscribe"
         on-tap="_toggleSubscription"
         disabled="[[!_isReady]]"
-        checked="[[!isEmpty(_topicData)]]">[[value]]</paper-toggle-button>
+        checked="[[_checked]]">[[value]]</paper-toggle-button>
 
     <paper-icon-button id="tooltip"
         icon="error-outline"
@@ -106,6 +106,11 @@
         _supported: {
           type: Boolean
         },
+        _checked: {
+          type: Boolean,
+          value: false,
+          computed: '_computeCheckedState(_topicData)'
+        },
         _isReady: {
           type: Boolean,
           value: false,
@@ -151,12 +156,12 @@
         }
       },
 
-      _computeReadyState: function(status, online, supported) {
-        return status && online && supported ? true : false;
+      _computeCheckedState: function(data) {
+        return !this.$.topicDocument.valueIsEmpty(data) && data ? true : false;
       },
 
-      isEmpty: function(value) {
-        return this.$.topicDocument.valueIsEmpty(value);
+      _computeReadyState: function(status, online, supported) {
+        return status && online && supported ? true : false;
       }
 
     });
