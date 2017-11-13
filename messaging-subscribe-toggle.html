@@ -12,6 +12,7 @@
 <!-- Firebase elements -->
 <link rel="import" href="../polymerfire/firebase-document.html">
 <link rel="import" href="../polymerfire/firebase-messaging.html">
+<link rel="import" href="../polymerfire/firebase-auth.html">
 
 <!--
 `<messaging-subscribe-toggle>`
@@ -46,13 +47,15 @@
       }
     </style>
 
+    <firebase-auth id="auth" user="{{_user}}"></firebase-auth>
+
     <firebase-messaging id="messaging"
         token="{{_token}}"
         status-known="{{_status}}"
         online="{{_online}}"
         push-supported="{{_supported}}"></firebase-messaging>
     <firebase-document id="topicDocument"
-        path="/topics/[[topic]]/[[_token]]"
+        path="/test_topics/[[topic]]/[[_user.uid]]/token"
         data="{{_topicData}}"></firebase-document>
 
     <paper-toggle-button id="subscribe"
@@ -92,7 +95,16 @@
        * @event token-updated
        */
 
+      /**
+       * Fired when anonymous user for this session changes.
+       * @event user-updated
+       */
+
       properties: {
+        _user: {
+          type: Object,
+          observer: '_userChanged'
+        },
         _token: {
           type: String,
           observer: '_tokenChanged'
@@ -128,6 +140,12 @@
         }
       },
 
+      _userChanged: function(user) {
+        if (user) {
+          this.fire('user-updated', { user: user });
+        }
+      },
+
       _tokenChanged: function(token) {
         if (token) {
           this.fire('token-updated', { token: token });
@@ -136,20 +154,24 @@
 
       _toggleSubscription: function() {
         if (this.$.subscribe.checked) {
-          this.$.messaging.requestPermission().then(function() {
-            // permission was granted
-            if (!this._token) {
-              this.addEventListener('token-updated', function(event) {
+          // signin
+          this.$.auth.signInAnonymously().then(function() {
+            // get permission
+            this.$.messaging.requestPermission().then(function() {
+              // permission was granted
+              if (!this._token) {
+                this.addEventListener('token-updated', function(e) {
+                  // setting topic data
+                  this.set('_topicData', e.detail.token);
+                }.bind(this));
+              } else {
                 // setting topic data
-                this.set('_topicData', true);
-              }.bind(this));
-            } else {
-              // setting topic data
-              this.set('_topicData', true);
-            }
-          }.bind(this), function(err) {
-            // permission was denied
-          });
+                this.set('_topicData', this._token);
+              }
+            }.bind(this)).catch(function(error) {
+              console.error('Permisson was denied:\n', error);
+            });
+          }.bind(this));
         } else {
           // resetting topic data
           this.set('_topicData', null);
